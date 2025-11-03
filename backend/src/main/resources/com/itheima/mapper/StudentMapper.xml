@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.mapper.StudentMapper">
+    <!--根据id修改学生信息-->
+    <update id="updateById">
+        update student
+        <set>
+            <!-- 推荐：判断不为null且不为空字符串（针对字符串类型） -->
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="no != null and no != ''">
+                no = #{no},
+            </if>
+            <!-- 数值类型只需判断不为null -->
+            <if test="gender != null">
+                gender = #{gender},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone},
+            </if>
+            <if test="degree != null">
+                degree = #{degree},
+            </if>
+            <if test="idCard != null and idCard != ''">
+                id_card = #{idCard},
+            </if>
+            <if test="isCollege != null">
+                is_college = #{isCollege},
+            </if>
+            <if test="address != null and address != ''">
+                address = #{address},
+            </if>
+            <if test="graduationDate != null">
+                graduation_date = #{graduationDate},
+            </if>
+            <if test="violationCount != null">
+                violation_count = #{violationCount},
+            </if>
+            <if test="violationScore != null">
+                violation_score = #{violationScore},
+            </if>
+            <!-- 最后一个字段不加逗号，避免set标签处理时可能出现的问题 -->
+            <if test="clazzId != null">
+                clazz_id = #{clazzId},
+            </if>
+            <if test="updateTime!=null">
+                update_time = #{updateTime}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--根据id批量删除学员-->
+    <delete id="deleteByIds">
+        delete from student where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <!--分页查询学生数据-->
+    <!--if标签中的 属性 是传入的参数名，来自接口方法的参数-->
+    <!--注：<where> 标签的作用是自动处理首个条件前的 AND 或 OR，
+    但它无法处理多个条件之间缺少的逻辑连接符。
+    因此，建议保留 <if> 标签内条件前的 AND，这是最安全的做法。-->
+    <select id="list" resultType="com.itheima.pojo.Student">
+        select s.*, c.name as clazzName
+        from student s
+        left join clazz c
+        on s.clazz_id = c.id
+        <where>
+            <if test="name != null and name !=''">
+                s.name like concat('%', #{name}, '%')
+            </if>
+            <if test="degree != null">
+                and s.degree = #{degree}
+            </if>
+            <if test="clazzId != null">
+                and s.clazz_id = #{clazzId};
+            </if>
+        </where>
+        order by update_time desc
+    </select>
+    <!--统计各个学员的学历信息-->
+    <select id="countStudentDegreeData" resultType="java.util.Map">
+        select (case
+                    when degree = 1 then '初中'
+                    when degree = 2 then '高中'
+                    when degree = 3 then '大专'
+                    when degree = 4 then '本科'
+                    when degree = 5 then '硕士'
+                    when degree = 6 then '博士'
+                    else '其他' end) as name
+             , count(*) as value
+        from student
+        group by degree
+    </select>
+    <!--统计每一个班级的人数-->
+    <select id="getStudentCountData" resultType="java.util.Map">
+        select c.name clazz,count(*) num from clazz c left join student s
+            on c.id = s.clazz_id group by c.name order by num desc;
+    </select>
+</mapper>

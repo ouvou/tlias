@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.mapper.OperateLogMapper">
+
+
+    <select id="list" resultType="com.itheima.pojo.OperateLog">
+        select e.name as operateEmpName,ol.* from operate_log ol,emp e where ol.operate_emp_id = e.id
+    </select>
+</mapper>

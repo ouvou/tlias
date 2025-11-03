@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.mapper.EmpLogMapper">
+    <insert id="insertLoginLog">
+        insert into emp_login_log (username, password, login_time, is_success
+        <if test="jwt != null">
+            ,jwt
+        </if>
+        ,cost_time)
+        values (#{username}, #{password}, #{loginTime}, #{isSuccess},
+        <if test="jwt != null">
+            #{jwt},
+        </if>
+        #{costTime})
+    </insert>
+</mapper>

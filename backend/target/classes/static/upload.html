@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>上传文件</title>
+</head>
+<body>
+<!--
+文件上传：前端的三要素：
+enctype：                声明文件数据的编码格式
+<input type="file">：	获取用户本地文件，生成 File 对象
+POST 方法：	            承载文件数据的请求传输方式
+总结：
+input[type=file] 获取文件 → enctype 定义编码 → POST 方法传输数据
+-->
+
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        姓名: <input type="text" name="name"><br>
+        年龄: <input type="text" name="age"><br>
+        头像: <input type="file" name="file"><br>
+        <input type="submit" value="提交">
+    </form>
+
+</body>
+</html>

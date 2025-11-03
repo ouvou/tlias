@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.mapper.EmpMapper">
+    <!--根据ID修改员工信息及员工的工作经历信息-->
+<!--set标签: 会自动生成set关键字; 会自动的删除掉更新字段后多余的,号-->
+    <update id="updateById">
+        UPDATE emp
+        <set>
+            <if test="username != null and username != ''">
+                username = #{username},
+            </if>
+            <if test="password != null and password !=''">
+                password = #{password},
+            </if>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="gender != null">
+                gender = #{gender},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone},
+            </if>
+            <if test="job != null">
+                job = #{job},
+            </if>
+            <if test="salary != null">
+                salary = #{salary},
+            </if>
+            <if test="image != null and image != ''">
+                image = #{image},
+            </if>
+            <if test="entryDate != null">
+                entry_date = #{entryDate},
+            </if>
+            <if test="deptId != null">
+                dept_id = #{deptId},
+            </if>
+            <if test="updateTime!=null">
+                update_time = NOW()
+            </if>
+
+        </set>
+        WHERE id = #{id}
+    </update>
+    <!--根据id来批量删除员工基本信息-->
+    <delete id="deleteByIds">
+        delete from emp where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--注意即使在xml映射文件中，分页查询的sql语句的结尾也是不能加上分号的;-->
+    <!-- where标签作用:
+                如果标签内的条件都不满足，不会生成 WHERE 关键字
+                如果有条件满足，会自动添加 WHERE 关键字
+                自动去除第一个条件前的 AND 或 OR 关键字-->
+    <select id="list" resultType="com.itheima.pojo.Emp">
+        select e.*,d.name as deptName from emp e left outer join dept d on e.dept_id = d.id
+        <where>
+            <if test="name != null and name !=''">
+                e.name like concat('%',#{name},'%')
+            </if>
+            <if test="gender != null">
+                and e.gender=#{gender}
+            </if>
+            <if test="begin!=null and end !=null">
+                and entry_date between #{begin} and #{end}
+            </if>
+        </where>
+        order by e.update_time desc
+    </select>
+    <!--自定义结果集ResultMap-->
+    <resultMap id="empResultMap" type="com.itheima.pojo.Emp">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="name" property="name"/>
+        <result column="gender" property="gender"/>
+        <result column="phone" property="phone"/>
+        <result column="job" property="job"/>
+        <result column="salary" property="salary"/>
+        <result column="image" property="image"/>
+        <result column="entry_date" property="entryDate"/>
+        <result column="dept_id" property="deptId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+
+        <!--封装工作经历信息-->
+        <collection property="exprList" ofType="com.itheima.pojo.EmpExpr">
+            <id column="ee_id" property="id"/>
+            <result column="ee_empid" property="empId"/>
+            <result column="ee_begin" property="begin"/>
+            <result column="ee_end" property="end"/>
+            <result column="ee_company" property="company"/>
+            <result column="ee_job" property="job"/>
+        </collection>
+    </resultMap>
+    <!--根据ID查询员工信息及员工的工作经历信息-->
+    <select id="getById" resultMap="empResultMap">
+        select e.*,
+               ee.id as   ee_id,
+               ee.emp_id  ee_empid,
+               ee.begin   ee_begin,
+               ee.end     ee_end,
+               ee.company ee_company,
+               ee.job     ee_job
+        from emp e
+                 left outer join emp_expr ee on e.id = ee.emp_id
+        where e.id = #{id};
+    </select>
+    <!--统计各个职位的员工人数-->
+    <select id="countEmpJobData" resultType="java.util.Map">
+        select
+            (case when job=1 then '班主任'
+                  when job=2 then '讲师'
+                  when job=3 then '学工主管'
+                  when job=4 then '教研主管'
+                  when job=5 then '咨询师'
+                  else '其他' end) pos,
+            count(*) as num
+        from emp group by pos order by num;
+
+    </select>
+    <!--统计各个性别的员工人数-->
+    <select id="countEmpGenderData" resultType="java.util.Map">
+        select if(gender=1,'男性员工','女性员工') as name,
+               count(*) as value
+        from emp group by gender;
+    </select>
+
+</mapper>

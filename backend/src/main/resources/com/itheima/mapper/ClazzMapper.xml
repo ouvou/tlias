@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.mapper.ClazzMapper">
+    <!--注意即使在xml映射文件中，分页查询的sql语句的结尾也是不能加上分号的;-->
+    <!-- 注意: #{} 占位符中的属性（如 name、begin、end）不是来自 Clazz 对象，而是来自 EmpQueryParam 这个参数对象
+        c.begin_date 中的 begin_date 是数据库表 clazz（别名 c）中的字段名，不是clazz对象的属性值
+      -->
+    <select id="list" resultType="com.itheima.pojo.Clazz">
+        -- 查询班级的信息, 以及班主任姓名
+        select
+        c.*,
+        e.name as master_name,
+        (case when now() &lt; c.begin_date then '未开班'
+        when now() &gt; c.end_date then '已结课'
+        else '在读'
+        end) as status
+        from clazz c left join emp e on c.master_id = e.id
+        <where>
+            <if test="name!=null and name !=''">
+                c.name like concat('%',#{name},'%')
+            </if>
+            <if test="begin!=null and end!=null ">
+                and c.begin_date = #{begin}
+                and c.end_date = #{end}
+            </if>
+        </where>
+
+    </select>
+</mapper>
