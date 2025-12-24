@@ -8,6 +8,7 @@
 
 Tlias（Intelligent Assisted Learning System）是一款面向职业教育场景的智能辅助学
 习管理系统，聚焦「教师、系统管理员」两类核心用户，实现班级管理、课程学习、违纪扣分、数据统计、权限管控等全流程教学辅助功能，解决传统教学中资源分散、管理效率低、数据统计难等痛点。
+
 🌟 核心特性
 
 教师端
@@ -51,11 +52,11 @@ Maven 3.8+ (后端构建)
 1. 克隆项目
 bash
 运行
-git clone https://github.com/ouvou/tlias.git
+git clone https://github.com/ouvou/tlias-intelligent-learning.git
 cd tlias
 2. 数据库配置
 创建数据库：CREATE DATABASE tlias DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-执行初始化脚本：sql/tlias_init.sql (包含表结构、初始数据、索引)
+执行初始化脚本：tlias_init.sql (包含表结构、初始数据、索引)
 修改后端配置：backend/src/main/resources/application.yml
 yaml
 spring:
@@ -106,7 +107,7 @@ Fork 本仓库
 ✨ 致谢
 感谢 Element Plus 提供的优质 UI 组件
 感谢 MyBatis Plus 简化数据库操作
-感谢 Redisson 解决分布式并发问题
+
 总结
 这份 README 包含开源项目核心要素：
 核心特性：按角色拆分功能，突出系统核心价值；
