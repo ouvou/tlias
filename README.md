@@ -1,9 +1,10 @@
 # Tlias 智能辅助学习系统
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Java](https://img.shields.io/badge/Java-blue.svg) Java 17
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-green.svg) Spring Boot 2.7.x
-![Vue 3](https://img.shields.io/badge/Vue-brightgreen.svg) Vue 3.x
-![MySQL](https://img.shields.io/badge/MySQL-orange.svg) MySQL 8.0
+![Java](https://img.shields.io/badge/Java-17-blue.svg)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-2.7.x-green.svg)
+![Vue](https://img.shields.io/badge/Vue-3.x-brightgreen.svg)
+![Element Plus](https://img.shields.io/badge/Element%20Plus-latest-blueviolet.svg)
+![MySQL](https://img.shields.io/badge/MySQL-8.0-orange.svg)
 
 Tlias（Intelligent Assisted Learning System）是一款面向职业教育场景的智能辅助学
 习管理系统，聚焦「教师、系统管理员」两类核心用户，实现班级管理、课程学习、违纪扣分、数据统计、权限管控等全流程教学辅助功能，解决传统教学中资源分散、管理效率低、数据统计难等痛点。
